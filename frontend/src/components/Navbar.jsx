@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate=useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -15,11 +17,14 @@ const Navbar = () => {
             <h1 className="text-2xl font-bold">AI Learning</h1>
           </div>
           <div className="hidden md:flex space-x-6">
-            <a href="#home" className="hover:text-blue-200">Home</a>
-            <a href="#about" className="hover:text-blue-200">About</a>
-            <a href="#services" className="hover:text-blue-200">Services</a>
-            <a href="#contact" className="hover:text-blue-200">Contact</a>
-            <a href="#chatbot" className="hover:text-blue-200">Chatbot</a>
+            <a  className="hover:text-blue-200" onClick={()=>navigate('/')}>Home</a>
+            <a  className="hover:text-blue-200" onClick={()=>navigate('/course')}>Course</a>
+            
+            <a  className="hover:text-blue-200" onClick={()=>navigate('/quiz')}>Quiz</a>
+            <a  className="hover:text-blue-200" onClick={()=>navigate('/chatbot')}>Chatbot</a>
+            
+            <a  className="hover:text-blue-200" onClick={ ()=>navigate('/dashboard')}>Dashboard</a>
+            <a  className="hover:text-blue-200" onClick={()=>navigate('/profile')}>Profile</a>
           </div>
           <div className="md:hidden">
             <button onClick={toggleMenu} className="text-white">
@@ -34,11 +39,12 @@ const Navbar = () => {
       {/* Mobile menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-blue-600 text-white px-4 py-2 space-y-2">
-          <a href="#home" className="block hover:text-blue-200">Home</a>
-          <a href="#about" className="block hover:text-blue-200">About</a>
-          <a href="#services" className="block hover:text-blue-200">Services</a>
-          <a href="#contact" className="block hover:text-blue-200">Contact</a>
-          <a href="#chatbot" className="block hover:text-blue-200">Chatbot</a>
+          <a  className="block hover:text-blue-200" onClick={()=>navigate('/')}>Home</a>
+          <a  className="block hover:text-blue-200" onClick={()=>navigate('/course')}>Course</a>
+          <a  className="block hover:text-blue-200" onClick={ ()=>navigate('/dashboard')}>Dashboard</a>
+          <a  className="block hover:text-blue-200" onClick={()=>navigate('/quiz')}>Quiz</a>
+          <a  className="block hover:text-blue-200" onClick={()=>navigate('/chatbot')}>Chatbot</a>
+          <a  className="block hover:text-blue-200" onClick={()=>navigate('/profile')}>Profile</a>
         </div>
       )}
     </nav>

@@ -1,11 +1,14 @@
+import {  useNavigate } from "react-router-dom"
+
 export default function Home() {
+  const navigate=useNavigate();
     return (
       <div className="bg-gray-100 min-h-screen">
         {/* Hero Section */}
         <header className="bg-blue-500 text-white py-20 text-center">
           <h1 className="text-4xl font-bold">AI-Powered Personalized Learning</h1>
           <p className="mt-4 text-lg">Enhance your learning experience with AI-driven recommendations.</p>
-          <button className="mt-6 bg-white text-blue-500 px-6 py-2 rounded-lg font-semibold hover:bg-gray-200">
+          <button className="mt-6 bg-white text-blue-500 px-6 py-2 rounded-lg font-semibold hover:bg-gray-200" onClick={()=>navigate("/quiz")}>
             Get Started
           </button>
         </header>
@@ -34,8 +37,8 @@ export default function Home() {
           <h2 className="text-3xl font-bold mb-8">What Our Learners Say</h2>
           <div className="max-w-3xl mx-auto">
             <div className="bg-white p-6 shadow-lg rounded-lg">
-              <p className="text-gray-700">"This platform transformed my learning journey! AI-powered quizzes helped me improve significantly."</p>
-              <span className="block mt-4 font-semibold">- Alex, Student</span>
+              <p className="text-gray-700">"No reviews Yet "</p>
+              <span className="block mt-4 font-semibold">- developing</span>
             </div>
           </div>
         </section>
@@ -43,7 +46,7 @@ export default function Home() {
         {/* Call to Action */}
         <footer className="text-center py-12">
           <h2 className="text-2xl font-bold">Start Learning Today!</h2>
-          <button className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600">
+          <button className="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600" onClick={()=>navigate('/login')}>
             Join Now
           </button>
         </footer>
