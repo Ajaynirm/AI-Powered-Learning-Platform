@@ -9,7 +9,6 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -24,5 +23,9 @@
     "mysql2": "^3.14.0",
     "nodemon": "^3.1.9",
     "openai": "^4.96.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.9",
+    "@types/cors": "^2.8.19"
   }
 }
