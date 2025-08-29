@@ -1,15 +1,12 @@
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
-
 dotenv.config();
 
-const apiKey=process.env.OPENAI_API_KEY;
-const openai = new OpenAI({ apiKey:apiKey});
 
+const openai = new OpenAI({ apiKey: process.env.OPENNAI_API_KEYY});
 const generateTestReport = async (req, res) => {
-    
   try {
-    const testData = req.body; // receives full test details
+    const testData = req.body; 
 
     const prompt = `
 You are an AI learning assistant.

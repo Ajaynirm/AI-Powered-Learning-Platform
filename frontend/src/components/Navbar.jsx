@@ -1,25 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore.js";
-// import {
-//   SignedIn,
-//   SignedOut,
-//   SignInButton,
-//   UserButton,
-// } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
-  const { authUser,logout } = useAuthStore();
+  const { authUser, logout } = useAuthStore();
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
 
   return (
-    // bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8 rounded-2xl shadow-xl text-center animate-fade-in
-    // w-full bg-blue-950 text-white shadow-md font-serif
     <nav className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4  shadow-xl text-center animate-fade-in cursor-pointer">
       <div className="max-w-7xl mx-auto px-4 py-3 ">
         <div className="flex justify-between items-center">
@@ -27,10 +19,12 @@ const Navbar = () => {
             <h1 className="text-2xl font-bold">AI Learning Platform</h1>
           </div>
           <div className="hidden md:flex space-x-6">
-         
-            <a className="hover:text-blue-200" onClick={() => {
-              navigate("/")
-              }}>
+            <a
+              className="hover:text-blue-200"
+              onClick={() => {
+                navigate("/");
+              }}
+            >
               Home
             </a>
             <button
@@ -61,37 +55,30 @@ const Navbar = () => {
             </button>
             <button
               className="hover:text-blue-200"
-              
-              onClick={()=> navigate("/profile")}
+              onClick={() => navigate("/profile")}
             >
               Profile
             </button>
 
-            {/* <header>
-              <SignedOut>
-                <SignInButton />
-              </SignedOut>
-              <SignedIn>
-                <UserButton />
-              </SignedIn>
-            </header> */}
             {authUser ? (
               <div>
-                 <button
-                 className="hover:text-blue-200"
-                 onClick={() => logout()}
-                 >Logout</button>
+                <button
+                  className="hover:text-blue-200"
+                  onClick={() => logout()}
+                >
+                  Logout
+                </button>
               </div>
-            ):
-               <div>
-                 <button
-                 className="hover:text-blue-200"
+            ) : (
+              <div>
+                <button
+                  className="hover:text-blue-200"
                   onClick={() => navigate("/login")}
-                 >Login</button>
-               </div>
-
-            }
-
+                >
+                  Login
+                </button>
+              </div>
+            )}
           </div>
           <div className="md:hidden">
             <button onClick={toggleMenu} className="text-white">

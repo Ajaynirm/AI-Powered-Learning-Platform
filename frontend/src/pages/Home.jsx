@@ -11,7 +11,7 @@ export default function Home() {
         {/* Hero Section */}
         <header className="bg-blue-500 text-white py-20 text-center">
           <h1 className="text-4xl font-bold">AI-Powered Personalized Learning</h1>
-          <p className="mt-4 text-lg">Enhance your learning experience with AI-driven recommendations.</p>
+          <p className="mt-4 text-lg">Enhance your learning experience with AI-driven Tests.</p>
           <button className="mt-6 bg-white text-blue-500 px-6 py-2 rounded-lg font-semibold hover:bg-gray-200" onClick={()=>navigate("/quiz")}>
             Get Started
           </button>

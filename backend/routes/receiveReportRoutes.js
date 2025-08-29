@@ -5,7 +5,6 @@ import { storeTestReport , getUserTestData, getSpecificReport} from "../controll
 const router = Router();
 
 router.post("/send-report", storeTestReport);
-// router.get("/get-report",getResults);
 
 router.get("/get-user-test-data/:user_id",getUserTestData);
 router.get("/get-test-report/:id",getSpecificReport);

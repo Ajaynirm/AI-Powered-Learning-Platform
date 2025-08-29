@@ -1,29 +1,22 @@
-//MySQL connection
-
-
-import { createPool } from 'mysql2';
+import { createPool } from "mysql2";
+import dotenv from "dotenv";
+dotenv.config();
 
 const pool = createPool({
-  host: '127.0.0.1',      // your MySQL host (e.g., 'localhost'),
-  port: 3306,
-  user: 'root',           // your MySQL username
-  password: '12345678',  // your MySQL password
-  database: 'ai_learning_platform_database'    // your database name
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
 });
-
-
 
 pool.getConnection((err, connection) => {
   if (err) {
-    console.error('Error connecting to MySQL:', err);
+    console.error("Error connecting to MySQL:", err);
     return;
   }
-  console.log('Connected to MySQL database!');
-  connection.release(); // Always release when using pool
+  console.log("Connected to MySQL database!");
+  connection.release();
 });
 
 export default pool;
-
-
-
-

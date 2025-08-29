@@ -1,4 +1,4 @@
-import { Routes,Route,Navigate } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuthStore } from "./store/AuthStore.js";
 import Chatbot from "./components/Chatbot";
@@ -8,17 +8,16 @@ import Dashboard from "./pages/Dashboard";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
-import Quiz from "./pages/Quiz";
+import Quiz from "./components/Quiz.jsx";
 import SignUpPage from "./pages/Signup";
 
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 
 function App() {
-  const { checkAuth ,authUser,isCheckingAuth} = useAuthStore();
+  const { checkAuth, authUser, isCheckingAuth } = useAuthStore();
   useEffect(() => {
     checkAuth();
-   
   }, [checkAuth]);
 
   console.log({ authUser });
@@ -31,26 +30,27 @@ function App() {
 
   return (
     <>
-      
       <Navbar />
       <Routes>
-      <Route path="/" element={<Home />} /> 
-      <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
-      <Route path="/login" element={!authUser ? <Login /> : <Navigate to="/" />} />
-      
-      {/* <Route path="/profile" element={<Profile/>} />  */}
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/signup"
+          element={!authUser ? <SignUpPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/login"
+          element={!authUser ? <Login /> : <Navigate to="/" />}
+        />
 
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/dashboard" element={<Dashboard /> } />
-      
-      <Route path="/course" element={<Courses/>} /> 
-      <Route path="/quiz" element={<Quiz/>} /> 
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
-      <Route path="/chatbot" element={<Chatbot />} /> 
+        <Route path="/course" element={<Courses />} />
+        <Route path="/quiz" element={<Quiz />} />
 
+        <Route path="/chatbot" element={<Chatbot />} />
       </Routes>
       <Toaster />
-      
     </>
   );
 }
