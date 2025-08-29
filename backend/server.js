@@ -1,6 +1,6 @@
 import express, { json } from "express";
 import authRoutes from "./routes/auth.route.js";
-
+import "./config/db.js"
 import testReportRoutes from "./routes/testReportRoutes.js";
 import receiveReportRoutes from "./routes/receiveReportRoutes.js";
 import cors from "cors";
