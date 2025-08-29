@@ -1,64 +1,50 @@
-📖 AI-Powered Learning Platform
+# 📖 AI-Powered Learning Platform  
 
-An intelligent, personalized learning platform that uses AI to generate questions, adapt difficulty, and track learner progress. Designed to make studying interactive, adaptive, and fun.
+An **intelligent, personalized learning platform** that uses **AI to generate questions, adapt difficulty, and track learner progress.**  
+Designed to make studying **interactive, adaptive, and fun ✨**.  
 
+---
 
-🚀 Features
+## 🚀 Features  
 
-📚 Topic-Based Quizzes – Select topics (e.g. JavaScript, Python, DSA) and know your Weakness and Strength to improve.
+- 📚 **Topic-Based Quizzes** – Select topics *(JavaScript, Python, DSA)* and analyze strengths & weaknesses.  
+- 🤖 **AI-Powered Question Generation** – Dynamic quizzes by difficulty *(easy / medium / hard)*.  
+- 📊 **Progress Tracking** – Real-time reports & insights with **improvement graphs**.  
+- 🧠 **Adaptive Learning** – Auto-generates quiz difficulty based on user preferences.  
+- 🎨 **Modern UI** – Responsive design built with **React + Tailwind**.  
+- 🔒 **Secure Backend** – Authentication & protected API routes using **JWT**.  
 
-🤖 AI-Powered Question Generation – Dynamic quizzes by difficulty (easy/medium/hard).
+---
 
-📊 Progress Tracking – Real-time reports & insights with improvement graph.
+## 🛠️ Tech Stack  
 
-🧠 Adaptive Learning – Automatically Generate quiz difficulty based on user Preference.
+| Layer        | Technologies |
+|--------------|--------------|
+| **Frontend** | React, Tailwind CSS |
+| **Backend**  | Node.js, Express.js |
+| **Database** | MySQL |
+| **ORM**      | Sequelize |
+| **AI**       | OpenAI API |
+| **Deployment** | Vercel (Frontend), Render (Backend) |
 
-🎨 Modern UI – Responsive design with [React/Tailwind].
+---
 
-🔒 Secure Backend – Authentication & protected Api routes with [JWT].
+## ⚡ Getting Started  
 
+### 1️⃣ Install Dependencies  
 
-🛠️ Tech Stack
-
-Frontend: React, Tailwind CSS
-Backend: Node.js, Express.js
-Database: MySQL 
-ORM: Sequelize
-AI Integration: OpenAI API 
-Deployment: Frontend → [Vercel], Backend → [Render]
-
-3️⃣ Install Dependencies
-
-Backend:
-
+**Backend:**  
+```bash
 cd backend
 npm install
 
+🌍 **Deployment:**
 
-Frontend:
+🌐 Frontend (React): [Your Vercel Link]
 
-cd frontend
-npm install
+⚙️ Backend (Express): [Your Render/Heroku Link]
 
-4️⃣ Run the Application
-
-Backend:
-
-npm run dev
-
-
-Frontend:
-
-npm start
-
-🌍 Deployment
-
-Frontend (React): [Your Vercel Link]
-
-Backend (Express): [Your Render/Heroku Link]
-
-Database: Mysql
-
+🗄️ Database: MySQL
 
 🤝 Contributing
 
@@ -78,8 +64,7 @@ Push & open a Pull Request
 This project is licensed under the MIT License – see the LICENSE
  file for details.
 
-
-✨ Built with passion for next-gen learning 🚀
+<p align="center">✨ Built with passion for <b>next-gen learning</b> 🚀</p>
 
 
 

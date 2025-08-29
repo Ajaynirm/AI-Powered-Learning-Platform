@@ -20,6 +20,7 @@ export default function QuestionPage({
   const [totalTime, setTotalTime] = useState(difficulties[difficulty] || 60);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  
   // Fetch questions from backend
   useEffect(() => {
     const fetchQuestions = async () => {

@@ -12,6 +12,7 @@ import {
   LineChart,
   Line,
 } from "recharts";
+import { axiosInstance } from "../lib/axios.js";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -41,8 +42,8 @@ export default function Dashboard() {
     } else {
       if (!detailedReports[testId]) {
         try {
-          const res = await axios.get(
-            `http://localhost:10000/api/report/get-test-report/${testId}}`
+          const res = await axiosInstance.get(
+            `/${testId}}`
           );
           setDetailedReports((prev) => ({ ...prev, [testId]: res.data }));
           console.log(detailedReports);
@@ -57,8 +58,8 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchTestData = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:10000/api/report/get-user-test-data/${authUser.id}`
+        const res = await axiosInstance.get(
+          `/${authUser.id}`
         );
         setTestData(res.data);
         setTotalTest(res.data.length);
@@ -76,7 +77,7 @@ export default function Dashboard() {
     const fetchReport = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:10000/api/report/get-test-report${testId}`
+          `/${testId}`
         );
         setTestData(res.data);
       } catch (error) {
