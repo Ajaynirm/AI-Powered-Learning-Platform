@@ -1,25 +1,16 @@
-import { createPool } from "mysql2";
-import dotenv from "dotenv";
-dotenv.config();
+import sequelize from "./orm.js";
+import "../models/User.js";
+import "../models/TestReport.js";
 
-const pool = createPool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  ssl: {
-    rejectUnauthorized: false,     
-  },
-});
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("✅ Connection established successfully.");
 
-pool.getConnection((err, connection) => {
-  if (err) {
-    console.error("Error connecting to MySQL:", err);
-    return;
+    await sequelize.sync({ alter: true });
+    console.log("✅ All models synced to DB.");
+  } catch (error) {
+    console.error("❌ Error syncing DB:", error);
   }
-  console.log("Connected to MySQL database!");
-  connection.release();
-});
+})();
 
-export default pool;

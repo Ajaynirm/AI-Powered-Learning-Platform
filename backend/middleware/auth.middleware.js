@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import pool from "../config/db.js"; // update with your actual db config path
+import User from "../models/User.js";
 
 export const protectRoute = async (req, res, next) => {
   try {
@@ -15,12 +15,10 @@ export const protectRoute = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized - Invalid Token" });
     }
 
-    // Query user from MySQL
-    const [rows] = await pool
-      .promise()
-      .query("SELECT id, fullName, email FROM Users WHERE id = ?", [decoded.userId]);
-
-    const user = rows[0];
+    // ✅ Use Sequelize to fetch user
+    const user = await User.findByPk(decoded.userId, {
+      attributes: ["id", "full_name", "email"], // adjust field names to your model
+    });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -29,7 +27,7 @@ export const protectRoute = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
-    console.log("Error in protectRoute middleware: ", error.message);
+    console.error("Error in protectRoute middleware:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };

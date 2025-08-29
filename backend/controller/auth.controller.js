@@ -1,8 +1,8 @@
-import { generateToken } from "../lib/util.js";
-import pool from "../config/db.js";
 import bcrypt from "bcryptjs";
+import { generateToken } from "../lib/util.js";
+import User from "../models/User.js";
 
-
+// ✅ Signup
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
 
@@ -16,9 +16,9 @@ export const signup = async (req, res) => {
     }
 
     // Check if user exists
-    const [existingUser] = await pool.promise().query('SELECT * FROM Users WHERE email = ?', [email]);
+    const existingUser = await User.findOne({ where: { email } });
 
-    if (existingUser.length > 0) {
+    if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
@@ -26,21 +26,20 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Insert new user
-    const [result] = await pool.promise().query(
-      'INSERT INTO Users (fullName, email, password) VALUES (?, ?, ?)',
-      [fullName, email, hashedPassword]
-    );
-
-    const newUserId = result.insertId;
+    // Create new user
+    const newUser = await User.create({
+      full_name: fullName,
+      email,
+      password: hashedPassword,
+    });
 
     // Generate JWT
-    generateToken(newUserId, res);
+    generateToken(newUser.id, res);
 
     res.status(201).json({
-      _id: newUserId,
-      fullName,
-      email,
+      _id: newUser.id,
+      fullName: newUser.full_name,
+      email: newUser.email,
     });
 
   } catch (error) {
@@ -49,18 +48,17 @@ export const signup = async (req, res) => {
   }
 };
 
+// ✅ Login
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     // Get user by email
-    const [rows] = await pool.promise().query('SELECT * FROM Users WHERE email = ?', [email]);
+    const user = await User.findOne({ where: { email } });
 
-    if (rows.length === 0) {
+    if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-
-    const user = rows[0];
 
     // Compare password
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -68,14 +66,13 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Generate JWT token
-    generateToken(user.id, res); // assuming your MySQL table's primary key is `id`
+    // Generate JWT
+    generateToken(user.id, res);
 
     res.status(200).json({
       _id: user.id,
-      fullName: user.fullName,
+      fullName: user.full_name,
       email: user.email,
-      profilePic: user.profilePic || null, // optional, depends on your schema
     });
 
   } catch (error) {
@@ -84,9 +81,10 @@ export const login = async (req, res) => {
   }
 };
 
+// ✅ Logout
 export const logout = (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 }); // Clear the cookie
+    res.cookie("jwt", "", { maxAge: 0 }); // Clear cookie
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error in logout controller", error.message);
@@ -94,14 +92,12 @@ export const logout = (req, res) => {
   }
 };
 
-
+// ✅ Check Auth
 export const checkAuth = (req, res) => {
   try {
-    res.status(200).json(req.user);
+    res.status(200).json(req.user); // user should be attached by middleware
   } catch (error) {
     console.log("Error in checkAuth controller", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-
