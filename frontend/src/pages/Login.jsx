@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/AuthStore.js";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff, Loader2, Lock, Mail, MessageSquare } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail,  } from "lucide-react";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,11 +28,11 @@ const Login = () => {
   }
   return (
     // grid lg:grid-cols-2
-    <div className="h-screen border-black">
+    <div className="min-h-screen">
 
       
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8 bg-gray-200  font-bold p-6 shadow-lg rounded-lg">
+        <div className="w-full max-w-md space-y-8   font-bold p-6 shadow-lg rounded-lg">
           
           <div className="text-center mb-8 ">
             <div className="flex flex-col items-center gap-2 group">
@@ -66,7 +66,7 @@ const Login = () => {
                 <span className="label-text font-medium">Password</span>
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center ">
                   <Lock className="h-5 w-5 text-base-content/40" />
                 </div>
                 <input
@@ -90,7 +90,7 @@ const Login = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full h-22" disabled={isLoggingIn}>
+            <button type="submit" className="btn btn-primary w-full h-10" disabled={isLoggingIn}>
               {isLoggingIn ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />

@@ -18,7 +18,6 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { authUser } = useAuthStore();
   const [totalTest, setTotalTest] = useState(0);
-  const [testDetail, setTestDetail] = useState([]);
   const [testId, setTestId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -29,16 +28,16 @@ export default function Dashboard() {
   const [detailedReports, setDetailedReports] = useState({});
 
   const formattedData = testData.map((test, index) => ({
-    name: `${test.testName} #${test.id}`, // or just test.testName
+    name: `${test.testName} #${test.id}`,
     score: parseFloat(test.score),
     totalMarks: parseFloat(test.totalMarks || 0),
     difficulty: test.difficulty,
-    date: new Date(test.dateTaken).toLocaleDateString(), // formatted date
+    date: new Date(test.dateTaken).toLocaleDateString(),
   }));
 
   const handleReportClick = async (testId) => {
     if (openDropdown === testId) {
-      setOpenDropdown(null); // close if already open
+      setOpenDropdown(null);
     } else {
       if (!detailedReports[testId]) {
         try {
@@ -73,20 +72,20 @@ export default function Dashboard() {
 
     fetchTestData();
   }, []);
-  useEffect(() => {
-    const fetchReport = async () => {
-      try {
-        const res = await axios.get(
-          `/${testId}`
-        );
-        setTestData(res.data);
-      } catch (error) {
-        console.error("Error fetching test data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchReport = async () => {
+  //     try {
+  //       const res = await axios.get(
+  //         `/${testId}`
+  //       );
+  //       setTestData(res.data);
+  //     } catch (error) {
+  //       console.error("Error fetching test data:", error);
+  //     }
+  //   };
 
-    fetchReport();
-  }, []);
+  //   fetchReport();
+  // }, []);
 
   if (loading) return <p>Loading...</p>;
   // if (error) return <p>{error}</p>;

@@ -20,3 +20,6 @@ const sequelize = new Sequelize(
 
 // Export sequelize so models can use it
 export default sequelize;
+
+
+

@@ -17,8 +17,8 @@ export default function Quiz() {
   const [result, setResult] = useState(null);
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center p-6">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl text-center font-serif md:max-w-6xl">
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className=" p-6 rounded-lg shadow-lg w-full max-w-4xl text-center font-serif md:max-w-6xl">
         {!topic && <SelectTopic setTopic={setTopic} />}
 
         {topic && !difficulty && (

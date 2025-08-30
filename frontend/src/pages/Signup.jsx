@@ -34,10 +34,10 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="h-screen border-black">
+    <div className="min-h-screen">
     
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="-full max-w-md space-y-8 bg-gray-200  font-bold p-12 shadow-lg rounded-lg">
+        <div className="-full max-w-md space-y-8   font-bold p-12 shadow-lg rounded-lg">
 
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">

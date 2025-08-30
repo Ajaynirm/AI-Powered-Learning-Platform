@@ -15,9 +15,9 @@ export default function Courses() {
   ];
 
   return (
-    <div className="bg-gray-100 min-h-screen p-6">
+    <div className=" min-h-screen p-6">
       {/* Page Header */}
-      <div className="bg-blue-500 text-white p-6 rounded-lg shadow-lg text-center">
+      <div className=" p-6 rounded-lg shadow-lg text-center">
         <h1 className="text-3xl font-bold">Courses</h1>
         <p className="text-lg mt-2">Explore and continue your learning journey.</p>
       </div>
@@ -27,16 +27,16 @@ export default function Courses() {
         <h2 className="text-2xl font-bold mb-4">Enrolled Courses</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {enrolledCourses.map((course) => (
-            <div key={course.id} className="bg-white p-6 rounded-lg shadow-lg">
+            <div key={course.id} className=" p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-bold">{course.title}</h2>
-              <p className="text-gray-700 mt-2">{course.description}</p>
+              <p className=" mt-2">{course.description}</p>
               <div className="mt-4">
                 <p className="text-sm font-semibold">Progress: {course.progress}%</p>
-                <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                <div className="w-full  rounded-full h-2.5 mt-2">
                   <div className="bg-blue-500 h-2.5 rounded-full" style={{ width: `${course.progress}%` }}></div>
                 </div>
               </div>
-              <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600">
+              <button className="mt-4 bg-blue-500  px-4 py-2 rounded-lg font-semibold hover:bg-blue-600">
                 Continue Learning
               </button>
             </div>
@@ -49,10 +49,10 @@ export default function Courses() {
         <h2 className="text-2xl font-bold mb-4">Available Courses</h2>
         <div className="grid md:grid-cols-2 gap-6">
           {availableCourses.map((course) => (
-            <div key={course.id} className="bg-white p-6 rounded-lg shadow-lg">
+            <div key={course.id} className=" p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-bold">{course.title}</h2>
-              <p className="text-gray-700 mt-2">{course.description}</p>
-              <button className="mt-4 bg-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600">
+              <p className=" mt-2">{course.description}</p>
+              <button className="mt-4 bg-green-700 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-600">
                 Enroll Now
               </button>
             </div>
