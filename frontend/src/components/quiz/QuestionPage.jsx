@@ -122,8 +122,8 @@ export default function QuestionPage({
           key={key}
           className={`block w-full text-left px-4 py-2 border rounded-lg mb-2 ${
             selectedOption === key
-              ? "bg-green-300"
-              : "bg-white hover:bg-gray-100"
+              ? "bg-green-400"
+              : ""
           }`}
           onClick={() => setSelectedOption(key)}
         >

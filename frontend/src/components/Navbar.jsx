@@ -39,7 +39,7 @@ const Navbar = () => {
             <li key={item.path}>
               <Link
                 to={item.path}
-                className={`hover:text-black ${
+                className={` ${
                   location.pathname === item.path
                     ? "underline font-semibold"
                     : ""

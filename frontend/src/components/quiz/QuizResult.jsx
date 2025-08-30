@@ -36,12 +36,18 @@ export default function QuizResult({
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Quiz Completed!</h2>
-      <p className="text-lg font-semibold mb-4">
-        Score: {score} / {questions.length}
-      </p>
-      <table className="w-full border border-gray-300 mb-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6 rounded shadow">
+    <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center sm:text-left">
+      Quiz Completed!
+    </h2>
+  
+    <p className="text-base sm:text-lg font-semibold mb-4 text-center sm:text-left">
+      Score: {score} / {questions.length}
+    </p>
+  
+    {/* ✅ Responsive Table */}
+    <div className="overflow-x-auto">
+      <table className="min-w-full border text-sm sm:text-base mb-6">
         <thead>
           <tr className="bg-gray-100">
             <th className="border p-2">Question</th>
@@ -69,35 +75,45 @@ export default function QuizResult({
           ))}
         </tbody>
       </table>
-
-      {loading ? (
-        <div className="flex flex-col items-center justify-center">
-          <div>{update}</div>
-          <Loader2 className="size-10 animate-spin" />
-        </div>
-      ) : (
-        result?.report && (
-          <div className="bg-gray-50 border rounded p-4 space-y-2">
-            <div>{update}</div>
-            {result.report
-              .split(/\d+\.\s*/)
-              .filter(Boolean)
-              .map((section, index) => {
-                const [title, ...content] = section.trim().split(":");
-                return (
-                  <div key={index}>
-                    <div className="font-bold text-blue-700">
-                      {title?.replace(/\*\*/g, "")}
-                    </div>
-                    <div className="text-gray-700">
-                      {content.join(":").replace(/\*\*/g, "")}
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        )
-      )}
     </div>
+  
+    {loading ? (
+      <div className="flex flex-col items-center justify-center space-y-3">
+        <div className="text-sm sm:text-base">{update}</div>
+        <Loader2 className="size-8 sm:size-10 animate-spin" />
+      </div>
+    ) : (
+      result?.report && (
+        <div className="bg-gray-50 border rounded p-3 sm:p-4 space-y-2">
+          <div className="text-sm sm:text-base">{update}</div>
+          {result.report
+            .split(/\d+\.\s*/)
+            .filter(Boolean)
+            .map((section, index) => {
+              const [title, ...content] = section.trim().split(":");
+              return (
+                <div key={index}>
+                  <div className="font-bold text-blue-700">
+                    {title?.replace(/\*\*/g, "")}
+                  </div>
+                  <div className="text-gray-700 text-sm sm:text-base">
+                    {content.join(":").replace(/\*\*/g, "")}
+                  </div>
+                </div>
+              );
+            })}
+          <div className="flex justify-center sm:justify-start">
+            <button
+              onClick={() => navigate("/quiz")}
+              className="bg-white text-blue-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-200 transition duration-300"
+            >
+              Take New Test
+            </button>
+          </div>
+        </div>
+      )
+    )}
+  </div>
+  
   );
 }
