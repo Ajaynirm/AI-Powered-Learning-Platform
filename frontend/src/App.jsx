@@ -10,8 +10,6 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import Quiz from "./components/Quiz.jsx";
 import SignUpPage from "./pages/Signup";
-
-import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -20,13 +18,6 @@ function App() {
     checkAuth();
   }, [checkAuth]);
 
-  
-  if (isCheckingAuth && !authUser)
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="size-10 animate-spin" />
-      </div>
-    );
 
   return (
     <>
