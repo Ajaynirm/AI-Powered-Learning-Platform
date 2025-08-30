@@ -49,7 +49,7 @@ export default function QuizResult({
     <div className="overflow-x-auto">
       <table className="min-w-full border text-sm sm:text-base mb-6">
         <thead>
-          <tr className="bg-gray-100">
+          <tr>
             <th className="border p-2">Question</th>
             <th className="border p-2">Your Answer</th>
             <th className="border p-2">Correct</th>
@@ -84,7 +84,7 @@ export default function QuizResult({
       </div>
     ) : (
       result?.report && (
-        <div className="bg-gray-50 border rounded p-3 sm:p-4 space-y-2">
+        <div className="flex flex-col justify-center items-center border rounded p-3 sm:p-4 space-y-2">
           <div className="text-sm sm:text-base">{update}</div>
           {result.report
             .split(/\d+\.\s*/)
@@ -102,7 +102,7 @@ export default function QuizResult({
                 </div>
               );
             })}
-          <div className="flex justify-center sm:justify-start">
+          <div className="flex justify-center items-center">
             <button
               onClick={() => navigate("/quiz")}
               className="bg-white text-blue-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-200 transition duration-300"
@@ -117,3 +117,6 @@ export default function QuizResult({
   
   );
 }
+
+
+
