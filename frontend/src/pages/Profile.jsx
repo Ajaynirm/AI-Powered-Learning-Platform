@@ -1,13 +1,14 @@
-
+import { useUser } from "@clerk/clerk-react";
 import { useAuthStore } from "../store/AuthStore.js";
 import { useNavigate } from "react-router-dom";
+import LogoutButton from "../components/auth/Logout.jsx";
 
 export default function Profile() {
    
-
+  const {user}=useUser();
     const navigate = useNavigate();
     const { authUser,logout } = useAuthStore();
-    if(!authUser){
+    if(!authUser && !user){
       return (
         <div className="flex flex-col">
                  <div className="flex flex-row justify-center p-10 m-5 font-extrabold font-stretch-90% btn h-10"
@@ -23,33 +24,23 @@ export default function Profile() {
       );
     }else{
       return (
-        <div className="bg-gray-100 min-h-screen p-6">
+        <div className=" min-h-screen p-6">
           {/* Profile Header */}
           
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto text-center">
+          <div className=" p-6 rounded-lg shadow-lg max-w-3xl mx-auto text-center">
             <img
-              
+              src={user?.imageUrl}
               alt="Profile"
               className="w-24 h-24 rounded-full mx-auto"
             />
-            <h1 className="text-2xl font-bold mt-4">{authUser.fullName} </h1>
-            <p className="text-gray-600">{authUser.email}</p>
+            <h1 className="text-2xl font-bold mt-4">{user?.fullName} </h1>
+            <p className="">{user?.primaryEmailAddress.emailAddress}</p>
           </div>
     
-          {/* User Details Section */}
-          <div className="max-w-3xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold mb-4">Profile Information</h2>
-            <div className="text-gray-700">
-              <p><strong>Full Name:</strong> { authUser.fullName }</p>
-              <p><strong>Email:</strong>{authUser.email}</p>
-              <p><strong>Enrolled Courses:</strong> AI for Beginners, Advanced React</p>
-              <p><strong>Quiz Progress:</strong> 10% Completed</p>
-            </div>
-            
-          </div>
+         
     
           {/* Settings & Logout */}
-          <div className="max-w-3xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg text-center flex flex-row justify-around">
+          <div className="max-w-3xl mx-auto mt-6  p-6 rounded-lg shadow-lg text-center flex flex-row justify-around">
             <div>
             <button className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600">
               Edit Profile
@@ -60,11 +51,11 @@ export default function Profile() {
             </button>
             </div>
             
-            <button className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600"
-               onClick={() => logout()} >
-              Logout
-            </button>
-            
+            <div className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600"
+                >
+               <LogoutButton />
+            </div>
+           
             
           </div>
         </div>

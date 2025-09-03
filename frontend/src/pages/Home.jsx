@@ -67,7 +67,7 @@ export default function Home() {
         <footer className="text-center py-12  ">
           <h2 className="text-2xl font-bold mb-14">Start Learning Today!</h2>
           <button
-            onClick={() => navigate("/login")}
+            onClick={() => navigate("/auth/sign-up")}
             className=" bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition duration-300"
           >
             Explore Adaptive Learning

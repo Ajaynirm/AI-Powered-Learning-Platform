@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../lib/axios.js";
 import { Loader2 } from "lucide-react";
+import { useAuthStore } from "../../store/AuthStore.js";
 
 export default function QuizResult({
   topic,
@@ -12,14 +13,17 @@ export default function QuizResult({
   const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState("");
   const [result, setResult] = useState(null);
+  const {authUser} =useAuthStore();
 
   useEffect(() => {
     const generateReport = async () => {
+      console.log(topic,difficulty,score,questions)
       try {
         setLoading(true);
-        setUpdate("Report Generating by AI");
+        setUpdate("AI Generating Report ...");
         const res = await axiosInstance.post("/report/generate-report", {
           topic,
+          questions,
           score,
           questionTimes,
           difficulty,
@@ -34,6 +38,29 @@ export default function QuizResult({
     };
     generateReport();
   }, []);
+
+  useEffect(() => {
+    const saveReport = async () => {
+      try {
+        await axiosInstance.post("/report/send-report", {
+          id: authUser.id, 
+          report: result,
+          topic,
+          score,
+          difficulty,
+          totalMarks: questions.length
+        });
+        console.log("Report saved successfully");
+      } catch (err) {
+        console.error("Failed to save report", err);
+      }
+    };
+  
+    if (authUser && result) {
+      saveReport();
+    }
+  }, [authUser, result]);
+
 
   return (
     <div className="max-w-4xl mx-auto p-4 sm:p-6 rounded shadow">
@@ -93,10 +120,10 @@ export default function QuizResult({
               const [title, ...content] = section.trim().split(":");
               return (
                 <div key={index}>
-                  <div className="font-bold text-blue-700">
+                  <div className="font-bold text-blue-500">
                     {title?.replace(/\*\*/g, "")}
                   </div>
-                  <div className="text-gray-700 text-sm sm:text-base">
+                  <div className="text-gray-300 text-sm sm:text-base">
                     {content.join(":").replace(/\*\*/g, "")}
                   </div>
                 </div>
@@ -104,8 +131,8 @@ export default function QuizResult({
             })}
           <div className="flex justify-center items-center">
             <button
-              onClick={() => navigate("/quiz")}
-              className="bg-white text-blue-600 px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-semibold hover:bg-gray-200 transition duration-300"
+              onClick={()=>{window.location.href = "/quiz"}}
+              className="bg-white text-blue-600 px-6 sm:px-8 py-2 mt-10  sm:py-3 rounded-lg font-semibold hover:bg-gray-200 transition duration-300"
             >
               Take New Test
             </button>

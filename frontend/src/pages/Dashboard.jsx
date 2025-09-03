@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore.js";
 import React, { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 
-import axios from "axios";
 import {
   XAxis,
   YAxis,
@@ -15,6 +15,7 @@ import {
 import { axiosInstance } from "../lib/axios.js";
 
 export default function Dashboard() {
+  const {user}=useUser();
   const navigate = useNavigate();
   const { authUser } = useAuthStore();
   const [totalTest, setTotalTest] = useState(0);
@@ -42,8 +43,9 @@ export default function Dashboard() {
       if (!detailedReports[testId]) {
         try {
           const res = await axiosInstance.get(
-            `/${testId}}`
+            `/report/get-test-report/${testId}}`
           );
+          
           setDetailedReports((prev) => ({ ...prev, [testId]: res.data }));
           console.log(detailedReports);
         } catch (error) {
@@ -58,8 +60,9 @@ export default function Dashboard() {
     const fetchTestData = async () => {
       try {
         const res = await axiosInstance.get(
-          `/${authUser.id}`
+          `/report/get-user-test-data/${authUser.id}`
         );
+        console.log(res)
         setTestData(res.data);
         setTotalTest(res.data.length);
       } catch (err) {
@@ -89,27 +92,31 @@ export default function Dashboard() {
 
   if (loading) return <p>Loading...</p>;
   // if (error) return <p>{error}</p>;
-  if (!authUser) {
+  if (!authUser && !user) {
     return (
       <div className="flex flex-col">
         <div className="flex flex-row justify-center p-10 m-5 font-extrabold font-stretch-90% btn h-10">
           Login to see Dashboard
+          
         </div>
+
         <button
           className="flex flex-row justify-center p-10 m-10 "
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/auth/sign-up")}
         >
+
           Go to Login
         </button>
       </div>
     );
   } else {
     return (
-      <div className="bg-gray-100 min-h-screen p-6">
+      <div className=" min-h-screen p-6">
         {/* Dashboard Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8 rounded-2xl shadow-xl text-center animate-fade-in">
           <h1 className="text-4xl font-extrabold tracking-tight">
             Welcome to Your Dashboard
+            <span className="text-red-400 pl-5">{user?.firstName}</span> 
           </h1>
           <p className="text-lg mt-3 opacity-90">
             Track your progress and manage your learning journey effortlessly.
@@ -118,20 +125,20 @@ export default function Dashboard() {
 
         {/* Stats Section */}
         <div className="max-w-5xl mx-auto mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
-            <h2 className="text-lg font-semibold text-gray-700 mb-1">
+          <div className=" p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
+            <h2 className="text-lg font-semibold  mb-1">
               Tests Taken
             </h2>
             <p className="text-3xl font-bold text-blue-600">{totalTest}</p>
           </div>
-          <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
-            <h2 className="text-lg font-semibold text-gray-700 mb-1">
+          <div className=" p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
+            <h2 className="text-lg font-semibold  mb-1">
               Tests Completed
             </h2>
             <p className="text-3xl font-bold text-green-500">{totalTest}</p>
           </div>
-          <div className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
-            <h2 className="text-lg font-semibold text-gray-700 mb-1">
+          <div className=" p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
+            <h2 className="text-lg font-semibold  mb-1">
               Overall Progress
             </h2>
             <p className="text-3xl font-bold text-purple-500">
@@ -166,13 +173,13 @@ export default function Dashboard() {
         {/* bar end */}
 
         {/* Recent Activity */}
-        <div className="max-w-4xl mx-auto mt-6 bg-white p-6 rounded-lg shadow-lg">
+        <div className="max-w-4xl mx-auto mt-6  p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-bold mb-4">Recent Activity</h2>
           <div className="p-4">
             <h2 className="text-xl font-bold mb-4">Test Summary</h2>
             <div className="overflow-x-auto shadow rounded-lg border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-100">
+              <table className="min-w-full divide-y ">
+                <thead className="">
                   <tr>
                     {[
                       "S.No",
@@ -186,17 +193,17 @@ export default function Dashboard() {
                     ].map((title, idx) => (
                       <th
                         key={idx}
-                        className="px-4 py-3 text-left text-sm font-semibold text-gray-700"
+                        className="px-4 py-3 text-left text-sm font-semibold "
                       >
                         {title}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100 bg-white">
+                <tbody className="divide-y ">
                   {testData.map((test, index) => (
                     <React.Fragment key={test.id}>
-                      <tr className="hover:bg-gray-50 transition">
+                      <tr className="transition">
                         <td className="px-4 py-2 text-sm text-center">
                           {index + 1}
                         </td>
@@ -230,7 +237,7 @@ export default function Dashboard() {
 
                       {openDropdown === test.id && (
                         <tr>
-                          <td colSpan="8" className="px-4 py-4 bg-gray-50">
+                          <td colSpan="8" className="px-4 py-4 ">
                             <div className="space-y-2">
                               {detailedReports[test.id]?.length > 0 ? (
                                 (() => {
@@ -246,8 +253,9 @@ export default function Dashboard() {
                                       return (
                                         <div
                                           key={idx}
-                                          className="bg-white border border-gray-200 rounded-md p-4 shadow-sm"
+                                          className="rounded-md p-4 shadow-sm"
                                         >
+                                          
                                           <div className="font-semibold text-blue-700 mb-1">
                                             {title
                                               ?.replace(/\*\*/g, "")

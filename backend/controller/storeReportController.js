@@ -3,14 +3,14 @@ import User from "../models/User.js";
 
 // ✅ Store a test report
 export const storeTestReport = async (req, res) => {
-  const { result, id, topic, score, difficulty, totalMarks } = req.body;
+  const { report, id, topic, score, difficulty, totalMarks } = req.body;
 
-  if (!result || !id || !topic || score === undefined || difficulty === undefined || totalMarks === undefined) {
+
+  if (!report || !id || !topic || score === undefined || difficulty === undefined || totalMarks === undefined) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   try {
-    // Ensure user exists before creating report
     const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -22,7 +22,7 @@ export const storeTestReport = async (req, res) => {
       score,
       totalMarks,
       difficulty,
-      report: result, // in your schema it's "report", not "result"
+      report
     });
 
     res.status(201).json({

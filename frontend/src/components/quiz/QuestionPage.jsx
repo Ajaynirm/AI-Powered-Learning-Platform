@@ -102,7 +102,14 @@ export default function QuestionPage({
   const current = questions[currentQuestion];
 
   if (!current) {
-    return <div>No questions available for this topic/difficulty.</div>;
+    return<>
+      <div className="text-red-500">No questions available for this topic/difficulty.</div>
+      <div >
+        <button className="mt-10 p-3 text-sm lg:text-lg lg:p-5 rounded-2xl text-white bg-blue-600"
+        onClick={()=>{window.location.href = "/quiz";}}
+        >Select New Topic</button>
+      </div>
+    </> 
   }
 
   return (

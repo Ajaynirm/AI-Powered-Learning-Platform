@@ -3,9 +3,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 
+
 const openai = new OpenAI({ apiKey: process.env.OPENNAI_API_KEYY});
 const generateTestReport = async (req, res) => {
   try {
+
     const testData = req.body; 
 
     const prompt = `

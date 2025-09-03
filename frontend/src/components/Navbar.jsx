@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore.js";
+import LogoutButton from "./auth/Logout.jsx";
+import { useUser } from "@clerk/clerk-react";
 
 const Navbar = () => {
+  const {user}=useUser();
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,7 +30,7 @@ const Navbar = () => {
     <div className="navbar  px-6 shadow-md">
       {/* Left Section */}
       <div className="flex-1">
-        <Link to="/" className="text-2xl font-bold">
+        <Link to="/" className="text-xl lg:text-2xl font-bold">
           AI Learning Platform
         </Link>
       </div>
@@ -35,6 +38,7 @@ const Navbar = () => {
       {/* Desktop Menu */}
       <div className="hidden md:flex items-center space-x-4">
         <ul className="menu menu-horizontal px-1 space-x-2">
+          
           {menuItems.map((item) => (
             <li key={item.path}>
               <Link
@@ -49,20 +53,19 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
-          {authUser ? (
+          {user ? (
             <li>
-              <button className="hover:text-black" onClick={() => logout()}>
-                Logout
-              </button>
+              <LogoutButton />
             </li>
           ) : (
             <li>
               <button
-                className="hover:text-black"
-                onClick={() => navigate("/login")}
+                className=""
+                onClick={() => navigate("/auth/sign-in")}
               >
                 Login
               </button>
+             
             </li>
           )}
         </ul>
@@ -184,20 +187,15 @@ const Navbar = () => {
                 </Link>
               </li>
             ))}
-            {authUser ? (
+            {user ? (
               <li>
-                <button
-                  className="hover:bg-base-200 rounded-lg"
-                  onClick={() => logout()}
-                >
-                  Logout
-                </button>
+                <LogoutButton />
               </li>
             ) : (
               <li>
                 <button
                   className="hover:bg-base-200 rounded-lg"
-                  onClick={() => navigate("/login")}
+                  onClick={() => navigate("/auth/sign-in")}
                 >
                   Login
                 </button>

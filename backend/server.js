@@ -7,6 +7,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import questionRoute from "./routes/questions.route.js";
 import dotenv from "dotenv";
+import clerkWebhook from "./routes/clerkWebhook.js";
+// import { ClerkExpressWithAuth, ClerkExpressRequireAuth, createClerkClient } from "@clerk/clerk-sdk-node";
 
 const app = express();
 app.use(json());
@@ -19,8 +21,11 @@ app.use(
     credentials: true,
   })
 );
+app.use("/api/webhooks/clerk", express.raw({ type: "application/json" }));
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/webhooks/clerk", clerkWebhook);
 
 app.use("/api/report", testReportRoutes);
 
