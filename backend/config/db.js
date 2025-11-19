@@ -6,6 +6,7 @@ import "../models/TestReport.js";
   try {
     await sequelize.authenticate();
     console.log("✅ Connection established successfully.");
+    
 
     await sequelize.sync({ alter: true });
     console.log("✅ All models synced to DB.");

@@ -10,6 +10,14 @@ const TestReport = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+    },
     testName: {
       type: DataTypes.STRING(200),
       allowNull: false,

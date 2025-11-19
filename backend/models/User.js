@@ -8,7 +8,7 @@ const User = sequelize.define("User", {
     primaryKey: true,
   },
   clerk_user_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(255),
     allowNull: false,
     unique: true
   },
@@ -31,8 +31,15 @@ const User = sequelize.define("User", {
 }, {
   tableName: "users",
   timestamps: true, // maps to createdAt & updatedAt
+  indexes: [
+    {
+      unique: true,
+      fields: ["clerk_user_id"],
+    },
+  ],
   createdAt: "created_at",
   updatedAt: "updated_at",
+
 });
 
 export default User;

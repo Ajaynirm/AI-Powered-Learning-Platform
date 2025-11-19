@@ -15,7 +15,7 @@ import {
 import { axiosInstance } from "../lib/axios.js";
 
 export default function Dashboard() {
-  const {user}=useUser();
+  const { user } = useUser();
   const navigate = useNavigate();
   const { authUser } = useAuthStore();
   const [totalTest, setTotalTest] = useState(0);
@@ -41,17 +41,23 @@ export default function Dashboard() {
       setOpenDropdown(null);
     } else {
       if (!detailedReports[testId]) {
+        setLoading(true);
+
         try {
           const res = await axiosInstance.get(
             `/report/get-test-report/${testId}}`
           );
-          
+
           setDetailedReports((prev) => ({ ...prev, [testId]: res.data }));
-          console.log(detailedReports);
+      
         } catch (error) {
           console.error("Error fetching detailed report:", error);
         }
+        finally{
+          setLoading(false);
+        }
       }
+
       setOpenDropdown(testId);
     }
   };
@@ -60,13 +66,12 @@ export default function Dashboard() {
     const fetchTestData = async () => {
       try {
         const res = await axiosInstance.get(
-          `/report/get-user-test-data/${authUser.id}`
+          `/report/get-user-test-data`
         );
-        console.log(res)
         setTestData(res.data);
         setTotalTest(res.data.length);
       } catch (err) {
-        console.error("Error fetching test data:", err);
+        console.error("Error fetching test data1:", err);
         setError("Failed to load test data");
       } finally {
         setLoading(false);
@@ -75,12 +80,15 @@ export default function Dashboard() {
 
     fetchTestData();
   }, []);
+
   // useEffect(() => {
   //   const fetchReport = async () => {
   //     try {
-  //       const res = await axios.get(
+  //       const res = await axiosInstance.get(
   //         `/${testId}`
   //       );
+  //       console.log(res.data);
+
   //       setTestData(res.data);
   //     } catch (error) {
   //       console.error("Error fetching test data:", error);
@@ -97,14 +105,12 @@ export default function Dashboard() {
       <div className="flex flex-col">
         <div className="flex flex-row justify-center p-10 m-5 font-extrabold font-stretch-90% btn h-10">
           Login to see Dashboard
-          
         </div>
 
         <button
           className="flex flex-row justify-center p-10 m-10 "
           onClick={() => navigate("/auth/sign-up")}
         >
-
           Go to Login
         </button>
       </div>
@@ -116,7 +122,7 @@ export default function Dashboard() {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8 rounded-2xl shadow-xl text-center animate-fade-in">
           <h1 className="text-4xl font-extrabold tracking-tight">
             Welcome to Your Dashboard
-            <span className="text-red-400 pl-5">{user?.firstName}</span> 
+            <span className="text-red-400 pl-5">{user?.firstName}</span>
           </h1>
           <p className="text-lg mt-3 opacity-90">
             Track your progress and manage your learning journey effortlessly.
@@ -126,21 +132,15 @@ export default function Dashboard() {
         {/* Stats Section */}
         <div className="max-w-5xl mx-auto mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           <div className=" p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
-            <h2 className="text-lg font-semibold  mb-1">
-              Tests Taken
-            </h2>
+            <h2 className="text-lg font-semibold  mb-1">Tests Taken</h2>
             <p className="text-3xl font-bold text-blue-600">{totalTest}</p>
           </div>
           <div className=" p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
-            <h2 className="text-lg font-semibold  mb-1">
-              Tests Completed
-            </h2>
+            <h2 className="text-lg font-semibold  mb-1">Tests Completed</h2>
             <p className="text-3xl font-bold text-green-500">{totalTest}</p>
           </div>
           <div className=" p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300 text-center">
-            <h2 className="text-lg font-semibold  mb-1">
-              Overall Progress
-            </h2>
+            <h2 className="text-lg font-semibold  mb-1">Overall Progress</h2>
             <p className="text-3xl font-bold text-purple-500">
               {(totalTest / totalTest) * 100}%
             </p>
@@ -237,46 +237,103 @@ export default function Dashboard() {
 
                       {openDropdown === test.id && (
                         <tr>
-                          <td colSpan="8" className="px-4 py-4 ">
-                            <div className="space-y-2">
-                              {detailedReports[test.id]?.length > 0 ? (
-                                (() => {
-                                  const parsed = JSON.parse(
-                                    detailedReports[test.id][0].result
-                                  );
-                                  return parsed?.report
-                                    ?.split(/\d+\.\s*/)
-                                    .filter(Boolean)
-                                    .map((section, idx) => {
-                                      const [title, ...rest] =
-                                        section.split(":");
-                                      return (
-                                        <div
-                                          key={idx}
-                                          className="rounded-md p-4 shadow-sm"
-                                        >
-                                          
-                                          <div className="font-semibold text-blue-700 mb-1">
-                                            {title
-                                              ?.replace(/\*\*/g, "")
-                                              .trim() || "Untitled"}
-                                          </div>
-                                          <div className="text-gray-700 text-sm whitespace-pre-wrap">
-                                            {rest
-                                              .join(":")
-                                              .replace(/\*\*/g, "")
-                                              .trim()}
-                                          </div>
-                                        </div>
-                                      );
-                                    });
-                                })()
-                              ) : (
-                                <p className="text-sm text-red-500">
-                                  No report found
-                                </p>
-                              )}
-                            </div>
+                          <td colSpan="8" className="px-4 py-4">
+                            {detailedReports[test.id] ? (
+                              (() => {
+                                // Parse JSON string
+                                const parsed = JSON.parse(
+                                  detailedReports[test.id].report
+                                );
+
+                                return (
+                                  <div className="space-y-4">
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Learner Type
+                                      </div>
+                                      <div className="">
+                                        {parsed.learnerType}
+                                      </div>
+                                    </div>
+
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Test Accuracy
+                                      </div>
+                                      <div className="">
+                                        {parsed.testAccuracy}%
+                                      </div>
+                                    </div>
+
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Difficulty Level
+                                      </div>
+                                      <div className="">
+                                        {parsed.difficultyLevel}
+                                      </div>
+                                    </div>
+
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Performance Summary
+                                      </div>
+                                      <div className=" whitespace-pre-wrap">
+                                        {parsed.performanceSummary}
+                                      </div>
+                                    </div>
+
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Strengths
+                                      </div>
+                                      <ul className="list-disc ml-5 ">
+                                        {parsed.strengths?.map((s, i) => (
+                                          <li key={i}>{s}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Weaknesses
+                                      </div>
+                                      <ul className="list-disc ml-5 ">
+                                        {parsed.weaknesses?.map((w, i) => (
+                                          <li key={i}>{w}</li>
+                                        ))}
+                                      </ul>
+                                    </div>
+
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Recommended Topics
+                                      </div>
+                                      <ul className="list-disc ml-5 ">
+                                        {parsed.topicRecommendations?.map(
+                                          (t, i) => (
+                                            <li key={i}>{t}</li>
+                                          )
+                                        )}
+                                      </ul>
+                                    </div>
+
+                                    <div className="p-4 rounded-md shadow-sm">
+                                      <div className="font-semibold text-blue-500">
+                                        Motivation Message
+                                      </div>
+                                      <div className="">
+                                        {parsed.motivationMessage}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })()
+                            ) : (
+                              <p className="text-sm text-red-500">
+                                No report found
+                              </p>
+                            )}
                           </td>
                         </tr>
                       )}

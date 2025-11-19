@@ -10,8 +10,8 @@ import dotenv from "dotenv";
 import clerkWebhook from "./routes/clerkWebhook.js";
 // import { ClerkExpressWithAuth, ClerkExpressRequireAuth, createClerkClient } from "@clerk/clerk-sdk-node";
 
+
 const app = express();
-app.use(json());
 dotenv.config();
 
 app.use(cookieParser());
@@ -23,8 +23,9 @@ app.use(
 );
 app.use("/api/webhooks/clerk", express.raw({ type: "application/json" }));
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth",express.raw({ type: "application/json" }),  authRoutes);
 
+app.use(express.json());
 app.use("/api/webhooks/clerk", clerkWebhook);
 
 app.use("/api/report", testReportRoutes);

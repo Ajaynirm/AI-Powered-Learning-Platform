@@ -6,8 +6,8 @@ const router = Router();
 
 router.post("/send-report",ProtectRoute, storeTestReport);
 
-router.get("/get-user-test-data/:user_id",ProtectRoute,getUserTestData);
-router.get("/get-test-report/:id",ProtectRoute,getSpecificReport);
+router.get("/get-user-test-data",ProtectRoute, getUserTestData);
+router.get("/get-test-report/:id",ProtectRoute, getSpecificReport);
 
 export default router;
 

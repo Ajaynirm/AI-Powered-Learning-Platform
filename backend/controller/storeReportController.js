@@ -11,10 +11,13 @@ export const storeTestReport = async (req, res) => {
   }
 
   try {
+
     const user = await User.findByPk(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+  
+
 
     const newReport = await TestReport.create({
       user_id: id,
@@ -35,17 +38,18 @@ export const storeTestReport = async (req, res) => {
   }
 };
 
+
+
+
 // ✅ Get all test data of specific user (without report field)
 export const getUserTestData = async (req, res) => {
-  const { user_id } = req.params;
-
+  const user_id = req.user.id;
   try {
     const results = await TestReport.findAll({
       where: { user_id },
       attributes: ["id", "testName", "difficulty", "totalMarks", "score", "dateTaken"],
       order: [["dateTaken", "DESC"]],
     });
-
     res.status(200).json(results);
   } catch (err) {
     console.error("Error fetching results:", err);
@@ -63,9 +67,9 @@ export const getSpecificReport = async (req, res) => {
     });
 
     if (!report) {
+      console.log("No report")
       return res.status(404).json({ message: "Report not found" });
     }
-
     res.status(200).json(report);
   } catch (err) {
     console.error("Error fetching report:", err);

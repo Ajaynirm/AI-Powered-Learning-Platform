@@ -11,6 +11,7 @@ export const ProtectRoute = [
         attributes: ["id", "full_name", "email"],
       });
       
+      
 
       if (!user) {
         return res.status(403).json({ message: "User not found in local DB" });

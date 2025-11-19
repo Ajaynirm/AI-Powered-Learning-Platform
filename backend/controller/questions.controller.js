@@ -10,9 +10,9 @@ export const getQuestions = async (req, res) => {
   });
 
   const prompt = `Generate 5 multiple-choice quiz questions on the topic of ${topic} (in computer science or engineering related) with a 
-  difficulty level of ${difficulty} (easy, medium, or hard).
+  difficulty level of ${difficulty} (easy/medium/hard).
   Each question should have:
-   the question text
+   the question text,
    4 options (labeled "A", "B", "C", "D")
    the correct answer key (e.g., "A", "B", etc.)
 Format the output as a JSON array with this structure:

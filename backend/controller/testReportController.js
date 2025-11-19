@@ -1,5 +1,9 @@
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
+import TestReport from "../models/TestReport.js";
+import User from "../models/User.js";
+
+
 dotenv.config();
 
 
@@ -11,31 +15,77 @@ const generateTestReport = async (req, res) => {
     const testData = req.body; 
 
     const prompt = `
-You are an AI learning assistant.
-
-Analyze this student's test performance and generate a brief(maximum 4 lines) report with :
-0. predict slow learner or medium learner or fast learner or topper from text data.
-1.give test accuracy out of 100 based on test data
-2.difficulty level: (based on test data)
-3. Performance summary
-4. Strengths 
-5. weaknesses
-6. Topic-wise learning recommendations(use topic of the text),
-7. Motivation message
-
-Test data:
-${JSON.stringify(testData, null, 2)}
+    You are an AI learning assistant.
+    
+    Analyze this student's test performance and return the result strictly in the following JSON format:
+    
+    {
+      "learnerType": "slow | medium | fast | topper",
+      "testAccuracy": number, 
+      "difficultyLevel": "easy | medium | hard",
+      "performanceSummary": "string",
+      "strengths": ["string"],
+      "weaknesses": ["string"],
+      "topicRecommendations": ["string"],
+      "motivationMessage": "string"
+    }
+    
+    Rules:
+    - Do NOT return explanations.
+    - Do NOT add extra text outside the JSON.
+    - Base everything only on the test data.
+    
+    Test data:
+    ${JSON.stringify(testData, null, 2)}
     `;
- 
+    
+
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
+      response_format: { type: "json_object" },
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
     });
+    
+    const clerkUserId = req.auth.userId;
+   
+    // if (!clerkUserId) {
+    //   return res.status(401).json({ message: "Unauthorized" });
+    // }
+
+    // userId IS YOUR clerk_user_id  
+    // Now verify user exists
+    let user;
+    if(clerkUserId){
+      user = await User.findOne({ where: { clerk_user_id: clerkUserId } });
+    }
+
+    // if (!user) {
+    //   return res.status(404).json({ message: "User not found in DB" });
+    // }
 
     const testReport = response.choices[0].message.content;
-    res.json({ report: testReport });
+    
+    let check;
+    
+    if(user){
+      // Directly save into DB
+     check=await TestReport.create({
+      user_id: user.id,
+      testName: req.body.topic,
+      score: req.body.score,
+      totalMarks: req.body.totalMarks,
+      difficulty: req.body.difficulty,
+      report: testReport, 
+    });
+  }
+
+    return res.status(201).json({
+      message: `Report generated and saved success `,
+      report: testReport
+    });
+
   } catch (error) {
     console.error("Error generating report:", error);
     res.status(500).json({ error: "Failed to generate report" });
@@ -44,4 +94,6 @@ ${JSON.stringify(testData, null, 2)}
 
 
 export default generateTestReport;
+
+
 
