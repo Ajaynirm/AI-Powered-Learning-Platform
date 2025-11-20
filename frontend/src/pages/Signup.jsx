@@ -12,10 +12,10 @@ import { Link } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
-const SignUpPage = () => {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
+    full_name: "",
     email: "",
     password: "",
   });
@@ -23,7 +23,7 @@ const SignUpPage = () => {
   const { signup, isSigningUp } = useAuthStore();
 
   const validateForm = () => {
-    if (!formData.fullName.trim()) return toast.error("Full name is required");
+    if (!formData.full_name.trim()) return toast.error("Full name is required");
     if (!formData.email.trim()) return toast.error("Email is required");
     if (!/\S+@\S+\.\S+/.test(formData.email))
       return toast.error("Invalid email format");
@@ -68,9 +68,9 @@ const SignUpPage = () => {
                   type="text"
                   className={`input input-bordered w-full pl-10 h-10`}
                   placeholder="John Doe"
-                  value={formData.fullName}
+                  value={formData.full_name }
                   onChange={(e) =>
-                    setFormData({ ...formData, fullName: e.target.value })
+                    setFormData({ ...formData, full_name: e.target.value })
                   }
                 />
               </div>
@@ -158,4 +158,4 @@ const SignUpPage = () => {
     </div>
   );
 };
-export default SignUpPage;
+export default Signup;

@@ -1,14 +1,12 @@
-import { useUser } from "@clerk/clerk-react";
 import { useAuthStore } from "../store/AuthStore.js";
 import { useNavigate } from "react-router-dom";
 import LogoutButton from "../components/auth/Logout.jsx";
 
 export default function Profile() {
    
-  const {user}=useUser();
     const navigate = useNavigate();
     const { authUser,logout } = useAuthStore();
-    if(!authUser && !user){
+    if(!authUser){
       return (
         <div className="flex flex-col">
                  <div className="flex flex-row justify-center p-10 m-5 font-extrabold font-stretch-90% btn h-10"
@@ -16,7 +14,7 @@ export default function Profile() {
                  >Login to see profile</div>
                  <button
                  className="flex flex-row justify-center p-10 m-10 "
-                 onClick={() => navigate("/login")}
+                 onClick={() => navigate("/auth/sign-in")}
                  >
                     Go to Login
                  </button>
@@ -29,12 +27,12 @@ export default function Profile() {
           
           <div className=" p-6 rounded-lg shadow-lg max-w-3xl mx-auto text-center">
             <img
-              src={user?.imageUrl}
-              alt="Profile"
+              src={authUser.full_name}
+              alt={authUser.full_name.toUpperCase().substring(0,2)}
               className="w-24 h-24 rounded-full mx-auto"
             />
-            <h1 className="text-2xl font-bold mt-4">{user?.fullName} </h1>
-            <p className="">{user?.primaryEmailAddress.emailAddress}</p>
+            <h1 className="text-2xl font-bold mt-4">{authUser.full_name.toUpperCase()} </h1>
+            <p className="">{authUser.email}</p>
           </div>
     
          

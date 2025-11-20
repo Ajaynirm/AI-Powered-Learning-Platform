@@ -1,10 +1,10 @@
 import { Router } from "express";
 import generateTestReport from "../controller/testReportController.js";
-import { requireAuth } from "@clerk/express";
+import { protect } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
-router.post("/generate-report", requireAuth() , generateTestReport);
+router.post("/generate-report", protect , generateTestReport);
 
 export default router;
 

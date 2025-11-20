@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL+"/api",
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   withCredentials: true,
 });
 

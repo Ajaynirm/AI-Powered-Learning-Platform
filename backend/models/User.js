@@ -7,11 +7,6 @@ const User = sequelize.define("User", {
     autoIncrement: true,
     primaryKey: true,
   },
-  clerk_user_id: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
-    unique: true
-  },
   full_name: {
     type: DataTypes.STRING(100),
     allowNull: false,
@@ -25,18 +20,12 @@ const User = sequelize.define("User", {
     },
   },
   password: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.TEXT,
     allowNull: true,
   },
 }, {
   tableName: "users",
   timestamps: true, // maps to createdAt & updatedAt
-  indexes: [
-    {
-      unique: true,
-      fields: ["clerk_user_id"],
-    },
-  ],
   createdAt: "created_at",
   updatedAt: "updated_at",
 

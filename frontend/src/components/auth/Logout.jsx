@@ -1,13 +1,11 @@
-import { useClerk } from "@clerk/clerk-react";
-import toast from "react-hot-toast";
+import { useAuthStore } from "../../store/AuthStore.js";
 
 const LogoutButton = () => {
-  const { signOut } = useClerk();
-
+  const {logout } = useAuthStore();
   return (
     <div>
         <button
-      onClick={() =>{signOut({ redirectUrl: "/" }); toast.success("Logout successfully")}}
+      onClick={() =>{ logout() }}
       
     >
       Logout

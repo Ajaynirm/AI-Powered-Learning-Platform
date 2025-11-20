@@ -12,8 +12,8 @@ export default function QuizResult({
 }) {
   const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState("");
-  const [result, setResult] = useState(null); //
-  const { authUser } = useAuthStore();
+  const [result, setResult] = useState(null); 
+  
 
   useEffect(() => {
     const generateReport = async () => {
@@ -31,12 +31,10 @@ export default function QuizResult({
         });
 
         let data = res.data.report;
-        console.log(data);
         // If it's a string, convert it to JSON
         if (typeof data === "string") {
           try {
             data = JSON.parse(data);
-            console.log(data);
           } catch (e) {
             console.error("Invalid JSON from AI:", e);
           }

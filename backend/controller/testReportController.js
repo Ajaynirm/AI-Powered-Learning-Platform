@@ -1,8 +1,6 @@
 import { OpenAI } from "openai";
 import dotenv from "dotenv";
 import TestReport from "../models/TestReport.js";
-import User from "../models/User.js";
-
 
 dotenv.config();
 
@@ -48,38 +46,29 @@ const generateTestReport = async (req, res) => {
       temperature: 0.7,
     });
     
-    const clerkUserId = req.auth.userId;
-   
-    // if (!clerkUserId) {
-    //   return res.status(401).json({ message: "Unauthorized" });
-    // }
-
-    // userId IS YOUR clerk_user_id  
-    // Now verify user exists
-    let user;
-    if(clerkUserId){
-      user = await User.findOne({ where: { clerk_user_id: clerkUserId } });
-    }
-
-    // if (!user) {
-    //   return res.status(404).json({ message: "User not found in DB" });
-    // }
+    const user = req.user;
 
     const testReport = response.choices[0].message.content;
     
-    let check;
+  
     
-    if(user){
-      // Directly save into DB
-     check=await TestReport.create({
-      user_id: user.id,
-      testName: req.body.topic,
-      score: req.body.score,
-      totalMarks: req.body.totalMarks,
-      difficulty: req.body.difficulty,
-      report: testReport, 
-    });
-  }
+    try{
+      if(user){
+        // Directly save into DB
+        await TestReport.create({
+        user_id: user.id,
+        testName: req.body.topic,
+        score: req.body.score,
+        totalMarks: req.body.totalMarks,
+        difficulty: req.body.difficulty,
+        report: testReport, 
+      });
+      console.log("saved to db ");
+    }
+    }catch(err){
+      console.log(`error while saving report: ${err} ` );
+    }
+    
 
     return res.status(201).json({
       message: `Report generated and saved success `,

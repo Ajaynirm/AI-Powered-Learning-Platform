@@ -26,20 +26,34 @@ export default function QuestionPage({
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        setMessage("Question Generating By AI");
+        setMessage("Generating questions...");
+  
         const res = await axiosInstance.get(
           `/questions/${topic}/${difficulty}`
         );
-        setQuestions(res.data.questions || []);
-        console.log(res.data.questions);
+  
+        const fetched = res.data.questions || [];
+  
+        if (fetched.length === 0) {
+          setQuestions([]);
+          setMessage(`No questions found for "${topic}". Try another topic.`);
+          return;
+        }
+  
+        setQuestions(fetched);
+        setMessage("");
       } catch (err) {
-        setMessage("Failed to load questions:", err.message);
+        console.error(err);
+        setMessage("Failed to load questions. Please try again.");
+        setQuestions([]);
       } finally {
         setLoading(false);
       }
     };
+  
     fetchQuestions();
   }, [topic, difficulty, setQuestions]);
+  
 
   // Timer logic
   // useEffect(() => {

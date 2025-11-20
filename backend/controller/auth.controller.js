@@ -1,60 +1,102 @@
-import { Webhook } from "svix";
-import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import { generateToken } from "../middleware/auth.middleware.js";
+import passport from "passport";
 
-dotenv.config();
-const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
 
-export const checkAuth = (req, res) => {
+
+export const register = async (req, res) => {
+
   try {
-    res.status(200).json(req.user);
+      const { full_name, email, password } = req.body;
+
+    if(!full_name|| !email || !password){
+      return res.status(500).json({message: `Missing fields... `});
+    } 
+
+    const  existing = await User.findOne( {where :{email}});
+
+    if (existing) return res.status(400).json({ message: "Email exists" });
+   
+    const hashed = await bcrypt.hash(password, 10);
+    const user = await User.create({ full_name, email, password: hashed });
+
+     // Generate JWT for this user
+     const token = generateToken(user);
+
+      // Set cookie → httpOnly prevents JS access; secure → HTTPS only
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // only HTTPS in prod
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    res.status(201).json({ message: "User registered",user,token});
   } catch (error) {
-    console.log("Error in checkAuth controller:", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.log("errorrs ");
+    return res.status(500).json({ message: "Internal server error " });
   }
 };
 
-export const receiveNewUserFromClerk = async (req, res) => {
-  const payload = req.body.toString();
-  const headers = req.headers;
-  try {
-    const wh = new Webhook(webhookSecret);
-
-    // Verify signature using Svix
-    const event = wh.verify(payload, headers);
-
-    // do your logic
-    if (event.type === "user.created") {
-      const userData = event.data;
-
-      const clerk_user_id = userData.id;
-      const first_name = userData.first_name || "";
-      const last_name = userData.last_name || "";
-      const full_name = `${first_name} ${last_name}`.trim();
-
-      const email = userData.email_addresses?.[0]?.email_address || null;
-
-      console.log("Creating new user:", { clerk_user_id, full_name, email });
-      try {
-        // Save to DB
-        await User.create({
-          clerk_user_id,
-          full_name,
-          email,
-          password: null, // since Clerk handles authentication
-        });
-  
-        console.log("User saved successfully.");
-      } catch (err) {
-        console.log("error in user table insertion ", err);
-      }
-    }
-
+export const login = async (req, res, next) => {
+  passport.authenticate("local", { session: false }, (err, user, info) => {
+   
+    if (err) return res.status(500).json({ message: "Internal error" } );
+    if (!user) return res.status(401).json({ message: info?.message || "Unauthorized" });
     
 
-    res.status(200).json({ success: true });
-  } catch (err) {
-    console.error("Webhook verification failed:", err);
-    res.status(400).json({ error: "Invalid signature" });
+    const token = generateToken(user);
+
+      // Set cookie → httpOnly prevents JS access; secure → HTTPS only
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // only HTTPS in prod
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+
+    return res.status(200).json({ message: "Login successful",user} );
+  })(req, res, next);
+};
+
+export const checkAuth = async (req, res) => {
+  try {
+    // req.user comes from passport JWT strategy
+    if (!req.user) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+
+    return res.status(200).json(req.user);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+    // If somehow req.user doesn't exist (invalid token), block logout
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized. No valid token." });
+    }
+
+    // Clear JWT cookie
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({ 
+      message: "Logged out successfully",
+      user: null 
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+

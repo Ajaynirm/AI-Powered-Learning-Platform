@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore.js";
 import LogoutButton from "./auth/Logout.jsx";
-import { useUser } from "@clerk/clerk-react";
+
 
 const Navbar = () => {
-  const {user}=useUser();
+
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const navigate = useNavigate();
   const location = useLocation();
@@ -53,7 +53,7 @@ const Navbar = () => {
               </Link>
             </li>
           ))}
-          {user ? (
+          {authUser ? (
             <li>
               <LogoutButton />
             </li>
@@ -187,7 +187,7 @@ const Navbar = () => {
                 </Link>
               </li>
             ))}
-            {user ? (
+            {authUser ? (
               <li>
                 <LogoutButton />
               </li>
