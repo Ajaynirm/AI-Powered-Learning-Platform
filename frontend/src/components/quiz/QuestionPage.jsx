@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { axiosInstance } from "../../lib/axios.js";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../store/AuthStore.js";
 
 const difficulties = { easy: 60, medium: 120, hard: 180 };
 
@@ -20,6 +22,9 @@ export default function QuestionPage({
   // const [totalTime, setTotalTime] = useState(difficulties[difficulty] || 60);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const { resetQuizState } = useAuthStore();
+
   
   // Fetch questions from backend
   useEffect(() => {
@@ -43,8 +48,7 @@ export default function QuestionPage({
         setQuestions(fetched);
         setMessage("");
       } catch (err) {
-        console.error(err);
-        setMessage("Failed to load questions. Please try again.");
+        setMessage("Backend error. Please try again later...");
         setQuestions([]);
       } finally {
         setLoading(false);
@@ -117,10 +121,10 @@ export default function QuestionPage({
 
   if (!current) {
     return<>
-      <div className="text-red-500">No questions available for this topic/difficulty.</div>
+      <div className="text-red-500">{message}</div>
       <div >
         <button className="mt-10 p-3 text-sm lg:text-lg lg:p-5 rounded-2xl text-white bg-blue-600"
-        onClick={()=>{window.location.href = "/quiz";}}
+         onClick={() => { resetQuizState(); navigate("/quiz");}}
         >Select New Topic</button>      
       </div>
     </> 

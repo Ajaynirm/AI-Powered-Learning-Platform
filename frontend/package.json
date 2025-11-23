@@ -12,6 +12,8 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.45.0",
     "@clerk/themes": "^2.4.15",
+    "@google/genai": "^1.30.0",
+    "@google/generative-ai": "^0.24.1",
     "@tailwindcss/postcss": "^4.0.5",
     "@tailwindcss/vite": "^4.0.5",
     "axios": "^1.8.4",

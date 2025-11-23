@@ -1,17 +1,21 @@
 import express from "express";
-import authRoutes from "./routes/auth.route.js"
-import passport from "./config/passport.js";
-import "./config/db.js"
-import testReportRoutes from "./routes/testReportRoutes.js";
-import receiveReportRoutes from "./routes/receiveReportRoutes.js";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import questionRoute from "./routes/questions.route.js";
 import dotenv from "dotenv";
-
 import morgan from "morgan";
 import helmet from "helmet";
 import { rateLimiter } from "./rateLimitter.js";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+
+import "./config/db.js"
+import authRoutes from "./routes/auth.route.js"
+import passport from "./config/passport.js";
+
+import testReportRoutes from "./routes/testReportRoutes.js";
+import receiveReportRoutes from "./routes/receiveReportRoutes.js";
+import questionRoute from "./routes/questions.route.js";
+import skillRoute from "./routes/skill.route.js";
+
+
 
 
 
@@ -46,6 +50,8 @@ app.use("/report", testReportRoutes);
 app.use("/report", receiveReportRoutes);
 
 app.use("/questions", questionRoute);
+
+app.use("/skills",  skillRoute );
 
 const port = process.env.PORT || 9000;
 

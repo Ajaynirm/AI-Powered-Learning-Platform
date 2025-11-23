@@ -26,6 +26,11 @@ export const useAuthStore = create((set, get) => ({
    setMode: (mode)=>{
     set({mode: mode});
    },
+   resetQuizState: () => set({
+    topic: null,
+    difficulty: null,
+    mode: null
+  }),
    checkAuth: async () => {
     try {
       set({ isCheckingAuth: true });

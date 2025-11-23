@@ -1,17 +1,15 @@
 import { useAuthStore } from "../../store/AuthStore.js";
 
-const LogoutButton = () => {
-  const {logout } = useAuthStore();
+const LogoutButton = ({ className }) => {
+  const { logout } = useAuthStore();
+
   return (
-    <div>
-        <button
-      onClick={() =>{ logout() }}
-      
+    <button
+      onClick={logout}
+      className={`w-full py-3 rounded-xl font-semibold bg-red-500 hover:bg-red-600 text-white shadow-md transition-transform hover:scale-105 ${className || ""}`}
     >
       Logout
     </button>
-    </div>
-    
   );
 };
 

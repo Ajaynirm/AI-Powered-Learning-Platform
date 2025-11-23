@@ -1,17 +1,22 @@
 import sequelize from "./orm.js";
 import "../models/User.js";
 import "../models/TestReport.js";
+import "../models/UserSkill.js";
 
 (async () => {
   try {
     await sequelize.authenticate();
     console.log("✅ Connection established successfully.");
     
-
-    await sequelize.sync({ alter: true });
+    try {
+      await sequelize.sync({ alter: false });
     console.log("✅ All models synced to DB.");
+    } catch (error) {
+      console.error("❌ Error syncing DB:", error);
+    }
+    
   } catch (error) {
-    console.error("❌ Error syncing DB:", error);
+    console.log("✅ Connection Failure  ... ");
   }
 })();
 

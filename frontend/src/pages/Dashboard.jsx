@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/AuthStore.js";
 import React, { useEffect, useState } from "react";
-import { useUser } from "@clerk/clerk-react";
 
 import {
   XAxis,
@@ -15,7 +14,6 @@ import {
 import { axiosInstance } from "../lib/axios.js";
 
 export default function Dashboard() {
-  const { user } = useUser();
   const navigate = useNavigate();
   const { authUser } = useAuthStore();
   const [totalTest, setTotalTest] = useState(0);
@@ -33,7 +31,7 @@ export default function Dashboard() {
     score: parseFloat(test.score),
     totalMarks: parseFloat(test.totalMarks || 0),
     difficulty: test.difficulty,
-    date: new Date(test.dateTaken).toLocaleDateString(),
+    date: new Date(test.dateTaken).toLocaleDateString().substring(3),
   }));
 
   const handleReportClick = async (testId) => {
@@ -81,39 +79,30 @@ export default function Dashboard() {
     fetchTestData();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchReport = async () => {
-  //     try {
-  //       const res = await axiosInstance.get(
-  //         `/${testId}`
-  //       );
-  //       console.log(res.data);
-
-  //       setTestData(res.data);
-  //     } catch (error) {
-  //       console.error("Error fetching test data:", error);
-  //     }
-  //   };
-
-  //   fetchReport();
-  // }, []);
 
   if (loading) return <p>Loading...</p>;
   // if (error) return <p>{error}</p>;
-  if (!authUser && !user) {
+  if (!authUser) {
     return (
-      <div className="flex flex-col">
-        <div className="flex flex-row justify-center p-10 m-5 font-extrabold font-stretch-90% btn h-10">
-          Login to see Dashboard
-        </div>
+      
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-neutral-900 dark:to-neutral-800 p-4">
+      <div className="bg-white dark:bg-neutral-800/90 backdrop-blur-md shadow-xl rounded-2xl p-8 sm:p-12 max-w-md w-full text-center space-y-6">
+        <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-800 dark:text-gray-100">
+          Login to access your Dashboard
+        </h2>
+        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+          You need to be signed in to view your personalized dashboard, track progress, and manage your account.
+        </p>
 
         <button
-          className="flex flex-row justify-center p-10 m-10 "
-          onClick={() => navigate("/auth/sign-up")}
+          onClick={() => navigate("/auth/sign-in")}
+          className="w-full sm:w-auto px-6 py-3 sm:px-10 sm:py-4 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold rounded-xl transition-all text-sm sm:text-base"
         >
-          Go to Login
+          Go to Login 
         </button>
       </div>
+    </div>
+
     );
   } else {
     return (
@@ -122,7 +111,7 @@ export default function Dashboard() {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8 rounded-2xl shadow-xl text-center animate-fade-in">
           <h1 className="text-4xl font-extrabold tracking-tight">
             Welcome to Your Dashboard
-            <span className="text-red-400 pl-5">{user?.firstName}</span>
+            <span className="text-red-400 pl-5">{authUser?.firstName}</span>
           </h1>
           <p className="text-lg mt-3 opacity-90">
             Track your progress and manage your learning journey effortlessly.

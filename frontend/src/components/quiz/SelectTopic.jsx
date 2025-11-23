@@ -20,6 +20,7 @@ export default function SelectTopic({ setTopic }) {
     "Operating System",
     "OOPS",
     "DBMS",
+    "Java Collections"
   ]);
 
   const [query, setQuery] = useState("");
@@ -43,7 +44,7 @@ export default function SelectTopic({ setTopic }) {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Select Topic</h2>
+      <h2 className="text-2xl md:text-4xl font-bold mb-4">Select Topic</h2>
 
       {/* Search Bar */}
       <div className="flex items-center gap-3 mb-4">
@@ -71,7 +72,7 @@ export default function SelectTopic({ setTopic }) {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filteredTopics.length === 0 && (
-          <p className="text-gray-600 col-span-3">No topics found</p>
+          <p className="text-gray-200 mt-20 md:text-4xl col-span-3">No Topics Found - Click Generate</p>
         )}
 
         {filteredTopics.map((topic) => (

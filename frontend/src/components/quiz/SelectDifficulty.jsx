@@ -1,4 +1,5 @@
 import React from "react";
+import { useAuthStore } from "../../store/AuthStore.js"
 
 const difficulties = {
   easy: 60,
@@ -7,9 +8,11 @@ const difficulties = {
 };
 
 export default function SelectDifficulty({ setDifficulty }) {
+  const { topic } = useAuthStore();
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Select Difficulty</h2>
+      <div className="text-2xl font-bold mb-10 md:mb-32 md:text-5xl">{topic}</div>
+      <h2 className="text-2xl  mb-4">Select Difficulty</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {Object.keys(difficulties).map((diff) => (
           <button

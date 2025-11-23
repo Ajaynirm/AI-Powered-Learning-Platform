@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../../lib/axios.js";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/AuthStore.js";
+
 
 export default function QuizResult({
   topic,
@@ -13,7 +15,8 @@ export default function QuizResult({
   const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState("");
   const [result, setResult] = useState(null); 
-  
+  const navigate = useNavigate();
+    const {   resetQuizState } = useAuthStore();
 
   useEffect(() => {
     const generateReport = async () => {
@@ -51,27 +54,8 @@ export default function QuizResult({
     generateReport();
   }, []);
 
-  // useEffect(() => {
-  //   const saveReport = async () => {
-  //     try {
-  //       await axiosInstance.post("/report/send-report", {
-  //         id: authUser.id,
-  //         report: result,
-  //         topic,
-  //         score,
-  //         difficulty,
-  //         totalMarks: questions.length,
-  //       });
-  //       console.log("Report saved successfully");
-  //     } catch (err) {
-  //       console.error("Failed to save report", err);
-  //     }
-  //   };
+ 
 
-  //   if (authUser && result) {
-  //     saveReport();
-  //   }
-  // }, [authUser, result]);
 
 
 
@@ -204,9 +188,7 @@ export default function QuizResult({
       )}
       <div className="flex justify-center items-center">
           <button
-            onClick={() => {
-              window.location.href = "/quiz";
-            }}
+            onClick={() => {resetQuizState();navigate("/quiz");}}
             className=" text-blue-400 px-6 sm:px-8 py-2  border-2 animate-bounce border-gray-400  sm:py-3 rounded-lg font-semibold transition duration-300"
           >
             Take New Test

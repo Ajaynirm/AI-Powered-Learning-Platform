@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const api_key = import.meta.env.VITE_OPENAAI_KEYY;
 const openai = new OpenAI({ apiKey: api_key, dangerouslyAllowBrowser: true });
 
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+
+const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -36,26 +40,34 @@ const Chatbot = () => {
     setActivePrompt("");
 
     try {
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          ...newMessages.map((msg) => ({
-            role: msg.isUser ? "user" : "assistant",
-            content: msg.text,
-          })),
-          { role: "user", content: userInput },
-        ],
-        store: true,
-      });
-
-      const aiReply = completion.choices[0].message.content.trim();
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    
+      // Convert chat history into a single prompt
+      const historyText = newMessages
+        .map((msg) => `${msg.isUser ? "User" : "Assistant"}: ${msg.text}`)
+        .join("\n");
+    
+      const prompt = `
+    System: You are a helpful assistant.
+    
+    ${historyText}
+    
+    User: ${userInput}
+    Assistant:
+      `;
+    
+      const result = await model.generateContent(prompt);
+    
+      const aiReply = result.response.text().trim();
+    
       setMessages([...newMessages, { text: aiReply, isUser: false }]);
     } catch (error) {
       console.error("Error fetching response: ", error);
     } finally {
       setLoading(false);
     }
+
+
   };
 
   useEffect(() => {
